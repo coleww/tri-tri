@@ -53,7 +53,10 @@ function maybeChange () {
 var display = document.getElementById('display')
 
 function stateYourDesire () {
-  display.textContent = 'I DEMAND YOU SHOW ME ' + currentDesire
+  var des = ['I DEMAND YOU SHOW ME ', 'I THIRST FOR ', 'BRING ME SOME '][~~(Math.random() * 3)] + currentDesire
+  display.textContent = des
+  var msg = new SpeechSynthesisUtterance(des);
+    window.speechSynthesis.speak(msg);
 }
 
 function down () {
