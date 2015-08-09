@@ -5,7 +5,7 @@ var int2freq = require('int2freq')
 // MAKE IT WEIRDER, YEAH?
 
 module.exports = function (context, data) {
-  var nodes={}
+  var nodes = {}
   nodes.root = context.createOscillator()
   nodes.third = context.createOscillator()
   nodes.fifth = context.createOscillator()
@@ -31,7 +31,7 @@ module.exports = function (context, data) {
 
   nodes.note = 'E4'
 
-  nodes.updateNote = function (note, scaale){
+  nodes.updateNote = function (note, scaale) {
     var scale = scaale !== undefined ? scaale : 'major'
     this.note = note
     this.root.frequency.setValueAtTime(int2freq(0, {tonic: this.note, scale: scale}), context.currentTime)
@@ -81,7 +81,7 @@ module.exports = function (context, data) {
     this.volume.gain.value = data.volume.gain || 0.3
   }
 
-  nodes.export = function(){
+  nodes.export = function () {
     return {
       root: {
         type: this.root.type,
@@ -126,18 +126,18 @@ module.exports = function (context, data) {
     }
   }
 
-  nodes.connect = function(destination){
+  nodes.connect = function (destination) {
     this.volume.connect(destination)
   }
 
-  nodes.start = function(){
+  nodes.start = function () {
     this.root.start()
     this.third.start()
     this.fifth.start()
   }
 
-  nodes.keys = function(){
-    return Object.keys(this).filter(function(k){
+  nodes.keys = function () {
+    return Object.keys(this).filter(function (k) {
       return ['import', 'export', 'connect', 'start', 'keys', 'updateNote'].indexOf(k) === -1
     })
   }
