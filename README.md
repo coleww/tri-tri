@@ -7,6 +7,8 @@ Triple Oscillator Triangle Synthesizer AKA tri-tri AKA TOTS
 
 (an experiment in publishing web audio synths to npm, much like https://www.npmjs.com/package/drone-e-o-synth)
 
+[DEMO](http://coleww.github.io/tri-tri/): a lil game in which you must show different colors to the camera in order to get it to perform a more pleasing drone.
+
 ### EXAMPLE
 
 ```
@@ -32,7 +34,8 @@ triTri.connect(context.destination)
 
 triTri.keys() 
 // => ['root', 'third', 'fifth', 'delay', 'pregain', 'filter', lowFilter', 'distortion', 'volume']
-// returns a list of keys to audio nodes, so you can do stuff like triTri.source.type = "square" or whatever. Mostly there for debugging. I guess hopefully they will always be named such that you can guess which type of node they will be....
+// returns a list of keys to audio nodes, so you can do stuff like triTri.source.type = "square" or whatever. 
+// Mostly there for debugging. I guess hopefully they will always be named such that you can guess which type of node they will be....
 
 triTri.start() // begin making noise
 triTri.updateNote("C4", "pentMin") // update the root note/scale
@@ -42,6 +45,3 @@ triTri.import(data) => resets state of audio nodes from JSON object
 ```
 
 Can theoretically use this with https://www.npmjs.com/package/web-audio-ui 
-
-
-
