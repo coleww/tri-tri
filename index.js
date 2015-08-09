@@ -25,6 +25,7 @@ module.exports = function (context, data) {
   nodes.pregain.connect(nodes.filter)
   nodes.filter.connect(nodes.analyser)
   nodes.analyser.connect(nodes.delay)
+  nodes.analyser.connect(nodes.lowFilter)
   nodes.delay.connect(nodes.distortion)
   nodes.distortion.connect(nodes.lowFilter)
   nodes.lowFilter.connect(nodes.volume)
