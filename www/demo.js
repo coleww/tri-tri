@@ -10,7 +10,7 @@ synth.connect(context.destination)
 
 
 var getCenterPixel = require('get-center-pixel')
-var ctx = document.getElementById('can').getContext("2d")
+var ctx = document.getElementById('can').getContext('2d')
 
 
 // red 255 0 0
@@ -22,7 +22,7 @@ function isRed (pixel) {
 }
 
 function isGreen (pixel){
-  return pixel.g - pixel.r - pixel.b > 0
+  return pixel.g - pixel.r - pixel.b > -50
 }
 
 function isBlue (pixel) {
@@ -31,15 +31,18 @@ function isBlue (pixel) {
 
 
 
-var chords = ["E4", "G4", "B4", "D5", "E5"]
+
+
+var chords = ['E4', 'G4', 'B4', 'D5', 'E5']
+
 // map color to chord?
-var currentDesire = "red"
-var currentChord = "E4"
+var currentDesire = 'red'
+var currentChord = 'E4'
 
 function maybeChange () {
-  if(Math.random() < 0.075){
-    currentDesire = ["red", "green", "blue"][~~(Math.random() * 3)]
-    currentChord = chords[~~(Math.random * 5)]
+  if(Math.random() < 0.025){
+    currentDesire = ['red', 'green', 'blue'][~~(Math.random() * 3)]
+    currentChord = chords[~~(Math.random() * 5)]
     synth.updateNote(currentChord)
 
     stateYourDesire()
@@ -47,14 +50,10 @@ function maybeChange () {
   }
 }
 
-var display = document.getElementById("display")
+var display = document.getElementById('display')
 
 function stateYourDesire () {
-  display.textContent = "I DEMAND YOU SHOW ME " + currentDesire
-  window.setTimeout(function(){
-    display.textContent = ""
-
-  }, 7500)
+  display.textContent = 'I DEMAND YOU SHOW ME ' + currentDesire
 }
 
 function down () {
@@ -73,19 +72,34 @@ function down () {
   } else {
     synth.fifth.detune.value -= (Math.random() * 5)
   }
-  return (~~synth.root.detune.value == 0 && ~~synth.third.detune.value == 0 && ~~synth.fifth.detune.value == 0)
+
+  if (synth.delay.delayTime.value > 1){
+    synth.delay.delayTime.value -= 0.05
+  }
+
+  if (synth.lowFilter.frequency.value > 750){
+    synth.lowFilter.frequency.value -= ~~((Math.random() * 5) - 2)
+  }
+  return (~~Math.abs(synth.root.detune.value) <= 1 && ~~Math.abs(synth.third.detune.value) <= 1 && ~~Math.abs(synth.fifth.detune.value) <= 1)
 }
 
 function up () {
   synth.root.detune.value += ((Math.random() * 5) - 2)
   synth.fifth.detune.value += ((Math.random() * 5) - 2)
   synth.third.detune.value += ((Math.random() * 5) - 2)
+  synth.lowFilter.frequency.value += ((Math.random() * 5) - 2)
+  if(synth.lowFilter.frequency.value > 15000){
+    synth.lowFilter.frequency.value -= (Math.random() * 500)
+  }
+  if (synth.delay.delayTime.value < 14.945){
+    synth.delay.delayTime.value += 0.05
+  }
 }
 
 gumDropMagic(function(pixel){
   // IF the pixel is within threshhold of current color desires, lower detuning
   // else, increase detuning
-  display.style.backgroundColor = "rgb(" + pixel.r + "," + pixel.g + "," + pixel.b + ")"
+  display.style.backgroundColor = 'rgb(' + pixel.r + ',' + pixel.g + ',' + pixel.b + ')'
 
   if (currentDesire == 'red') {
     if (isRed(pixel)) {
@@ -112,10 +126,6 @@ gumDropMagic(function(pixel){
       up()
     }
   }
-
-
-  // OCCASIONALLY, change the current chord and desire
-
 })
 
 
@@ -135,7 +145,6 @@ function gumDropMagic (cb){
           var data = ctx.getImageData(0, 0, 320, 240).data
           var pixel = getCenterPixel(data, 320, 240)
           cb(pixel)
-          console.log(pixel.r + "?" + pixel.g + "?" + pixel.b)
           requestAnimationFrame(draw)
         }
         draw()
@@ -143,9 +152,9 @@ function gumDropMagic (cb){
         cb(true)
       } // error callback: how to attempt to get just audio if video fails?
     }, function (err)  {
-        document.body.textContent = "sorry gosh, wow, something horrible must have happened"
+        document.body.textContent = 'sorry gosh, wow, something horrible must have happened'
       })
   } else {
-    document.body.textContent = "sorry yr device does not have a webcam or something whoops"
+    document.body.textContent = 'sorry yr device does not have a webcam or something whoops'
   }
 }

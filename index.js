@@ -13,6 +13,7 @@ module.exports = function (context, data) {
   nodes.pregain = context.createGain()
   nodes.filter = context.createBiquadFilter()
   nodes.analyser = context.createAnalyser()
+  nodes.delay = context.createDelay(15.0)
   nodes.distortion = context.createWaveShaper()
 
   nodes.lowFilter = context.createBiquadFilter()
@@ -23,17 +24,19 @@ module.exports = function (context, data) {
   nodes.third.connect(nodes.pregain)
   nodes.pregain.connect(nodes.filter)
   nodes.filter.connect(nodes.analyser)
-  nodes.analyser.connect(nodes.distortion)
+  nodes.analyser.connect(nodes.delay)
+  nodes.delay.connect(nodes.distortion)
   nodes.distortion.connect(nodes.lowFilter)
   nodes.lowFilter.connect(nodes.volume)
 
   nodes.note = 'E4'
 
-  nodes.updateNote = function (note){
+  nodes.updateNote = function (note, scaale){
+    var scale = scaale !== undefined ? scaale : 'major'
     this.note = note
-    this.root.frequency.value = int2freq(0, {tonic: this.note, scale: 'major'})
-    this.third.frequency.value = int2freq(2, {tonic: this.note, scale: 'major'})
-    this.fifth.frequency.value = int2freq(4, {tonic: this.note, scale: 'major'})
+    this.root.frequency.setValueAtTime(int2freq(0, {tonic: this.note, scale: scale}), context.currentTime)
+    this.third.frequency.setValueAtTime(int2freq(2, {tonic: this.note, scale: scale}), context.currentTime)
+    this.fifth.frequency.setValueAtTime(int2freq(4, {tonic: this.note, scale: scale}), context.currentTime)
   }
 
   nodes.import = function (data) {
@@ -41,6 +44,7 @@ module.exports = function (context, data) {
     data.root = data.root || {}
     data.third = data.third || {}
     data.fifth = data.fifth || {}
+    data.delay = data.delay || {}
     data.distortion = data.distortion || {}
     data.filter = data.filter || {}
     data.lowFilter = data.lowFilter || {}
@@ -60,8 +64,9 @@ module.exports = function (context, data) {
     this.fifth.detune.value = data.fifth.detune || 0
 
     this.pregain.gain.value = data.pregain.gain || 0.3
+    this.delay.delayTime.value = data.delay.delayTime || 2.5
 
-    this.distortion.curve = data.distortion.curve || makeDistortionCurve(200)
+    this.distortion.curve = data.distortion.curve || makeDistortionCurve(400)
 
     this.filter.Q.value = data.filter.Q || 25
     this.filter.frequency.value = data.filter.frequency || 400
@@ -101,6 +106,9 @@ module.exports = function (context, data) {
         frequency: this.filter.frequency.value,
         type: this.filter.type,
         detune: this.filter.detune.value
+      },
+      delay: {
+        delayTime: this.delay.delayTime.value
       },
       distortion: {
         curve: this.distortion.curve

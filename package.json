@@ -1,6 +1,6 @@
 {
-  "name": "vid-synth",
-  "description": "Put A Description Here!",
+  "name": "tri-tri",
+  "description": "Triple Triangle Synth Thing",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
