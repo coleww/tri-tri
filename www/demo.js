@@ -18,15 +18,15 @@ var ctx = document.getElementById('can').getContext("2d")
 // blue 0 0 255
 
 function isRed (pixel) {
-  return pixel.r - pixel.g - pixel.b > 127
+  return pixel.r - pixel.g - pixel.b > 0
 }
 
 function isGreen (pixel){
-  return pixel.g - pixel.r - pixel.b > 127
+  return pixel.g - pixel.r - pixel.b > 0
 }
 
 function isBlue (pixel) {
-  return pixel.b - pixel.r - pixel.g > 127
+  return pixel.b - pixel.r - pixel.g > 0
 }
 
 
@@ -37,10 +37,13 @@ var currentDesire = "red"
 var currentChord = "E4"
 
 function maybeChange () {
-  if(Math.random() < 0.01){
+  if(Math.random() < 0.075){
     currentDesire = ["red", "green", "blue"][~~(Math.random() * 3)]
-    synth.updateNote(chords[~~(Math.random * 5)])
+    currentChord = chords[~~(Math.random * 5)]
+    synth.updateNote(currentChord)
+
     stateYourDesire()
+    console.log(currentDesire, currentChord)
   }
 }
 
@@ -55,26 +58,33 @@ function stateYourDesire () {
 }
 
 function down () {
-  synth.root.detune.value -= Math.random() * 5
-  synth.fifth.detune.value -= Math.random() * 5
-  synth.third.detune.value -= Math.random() * 5
-  if(synth.root.detune.value < 0) synth.root.detune.value = 0
-  if(synth.fifth.detune.value < 0) synth.fifth.detune.value = 0
-  if(synth.third.detune.value < 0) synth.third.detune.value = 0
-  return (synth.root.detune.value == 0 && synth.third.detune.value == 0 && synth.fifth.detune.value == 0)
+  if(synth.root.detune.value < 0) {
+    synth.root.detune.value += (Math.random() * 5)
+  } else {
+    synth.root.detune.value -= (Math.random() * 5)
+  }
+  if(synth.third.detune.value < 0) {
+    synth.third.detune.value += (Math.random() * 5)
+  } else {
+    synth.third.detune.value -= (Math.random() * 5)
+  }
+  if(synth.fifth.detune.value < 0) {
+    synth.fifth.detune.value += (Math.random() * 5)
+  } else {
+    synth.fifth.detune.value -= (Math.random() * 5)
+  }
+  return (~~synth.root.detune.value == 0 && ~~synth.third.detune.value == 0 && ~~synth.fifth.detune.value == 0)
 }
 
 function up () {
-  synth.root.detune.value += Math.random() * 5
-  synth.fifth.detune.value += Math.random() * 5
-  synth.third.detune.value += Math.random() * 5
+  synth.root.detune.value += ((Math.random() * 5) - 2)
+  synth.fifth.detune.value += ((Math.random() * 5) - 2)
+  synth.third.detune.value += ((Math.random() * 5) - 2)
 }
 
 gumDropMagic(function(pixel){
   // IF the pixel is within threshhold of current color desires, lower detuning
   // else, increase detuning
-  console.log(pixel)
-  console.log("rgb(" + pixel.r + "," + pixel.g + "," + pixel.b + ")")
   display.style.backgroundColor = "rgb(" + pixel.r + "," + pixel.g + "," + pixel.b + ")"
 
   if (currentDesire == 'red') {
@@ -123,9 +133,9 @@ function gumDropMagic (cb){
         function draw () {
           ctx.drawImage(video, 0, 0, 320, 240)
           var data = ctx.getImageData(0, 0, 320, 240).data
-          console.log(data[200])
-          cb(getCenterPixel(data, 320, 240))
-
+          var pixel = getCenterPixel(data, 320, 240)
+          cb(pixel)
+          console.log(pixel.r + "?" + pixel.g + "?" + pixel.b)
           requestAnimationFrame(draw)
         }
         draw()
@@ -134,7 +144,6 @@ function gumDropMagic (cb){
       } // error callback: how to attempt to get just audio if video fails?
     }, function (err)  {
         document.body.textContent = "sorry gosh, wow, something horrible must have happened"
-        console.log(err)
       })
   } else {
     document.body.textContent = "sorry yr device does not have a webcam or something whoops"
