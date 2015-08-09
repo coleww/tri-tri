@@ -1,7 +1,7 @@
 tri-tri
 ----------------
 
-[![NPM](https://nodei.co/npm/vid-synth.png)](https://nodei.co/npm/vid-synth/) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard) 
+[![NPM](https://nodei.co/npm/tri-tri.png)](https://nodei.co/npm/tri-tri/) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard) 
 
 Triple Oscillator Triangle Synthesizer AKA tri-tri AKA TOTS
 
