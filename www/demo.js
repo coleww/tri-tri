@@ -9,8 +9,8 @@ var synth = vidSynth(context)
 synth.connect(context.destination)
 
 
-var getCenterPixel =require('get-center-pixel')
-var ctx = document.getElementById('canvas').getContext("2d")
+var getCenterPixel = require('get-center-pixel')
+var ctx = document.getElementById('can').getContext("2d")
 
 
 // red 255 0 0
@@ -73,6 +73,8 @@ function up () {
 gumDropMagic(function(pixel){
   // IF the pixel is within threshhold of current color desires, lower detuning
   // else, increase detuning
+  console.log(pixel)
+  console.log("rgb(" + pixel.r + "," + pixel.g + "," + pixel.b + ")")
   display.style.backgroundColor = "rgb(" + pixel.r + "," + pixel.g + "," + pixel.b + ")"
 
   if (currentDesire == 'red') {
@@ -116,10 +118,12 @@ function gumDropMagic (cb){
       video.onloadedmetadata = function (e) {
         video.play()
         synth.start()
+        stateYourDesire()
 
         function draw () {
-          ctx.drawImage(video)
+          ctx.drawImage(video, 0, 0, 320, 240)
           var data = ctx.getImageData(0, 0, 320, 240).data
+          console.log(data[200])
           cb(getCenterPixel(data, 320, 240))
 
           requestAnimationFrame(draw)

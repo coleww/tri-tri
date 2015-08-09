@@ -1,6 +1,9 @@
 var makeDistortionCurve = require('make-distortion-curve')
 var int2freq = require('int2freq')
 
+// ADD SP<E DE:LAY
+// MAKE IT WEIRDER, YEAH?
+
 module.exports = function (context, data) {
   var nodes={}
   nodes.root = context.createOscillator()
