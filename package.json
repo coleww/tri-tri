@@ -19,11 +19,21 @@
   "license": "MIT",
   "keywords": [
     "video",
-    "synth"
+    "synth",
+    "noise",
+    "web audio"
   ],
   "author": "Cole Willsea <coleww@gmail.com> (http://colewillsea.com/)",
   "dependencies": {
     "int2freq": "^1.0.1",
     "make-distortion-curve": "^1.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/coleww/tri-tri.git"
+  },
+  "bugs": {
+    "url": "https://github.com/coleww/tri-tri/issues"
+  },
+  "homepage": "https://github.com/coleww/tri-tri"
 }

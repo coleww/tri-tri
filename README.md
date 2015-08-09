@@ -22,7 +22,9 @@ makeTriTri returns an object that posses the following methods:
 - start() => calls start() on all the source nodes
 - export() => returns JSON respresentation of the instrument
 - import(data) => loads JSON data, or uses default values if no data is passed.
-- updateNote(noteStr, scale) => sets the synth frequencies to play a major chord in the given note and str. note should look like "E4", etc. Scale can be "major", "minor", "pentMaj", "pentMin", or "blues", and defaults to "major".
+- updateNote(noteStr, scale) => sets the synth frequencies to play a major chord in the given note and str. 
+=> note should look like "E4", etc. 
+=> Scale can be "major", "minor", "pentMaj", "pentMin", or "blues", and defaults to "major".
 
 ### EXAMPLE CONTINUED
 
